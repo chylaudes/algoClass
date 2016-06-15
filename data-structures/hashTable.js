@@ -45,7 +45,7 @@ myMap.forEach(callbackFn)
 Invokes callback function once for each key-value pair in the hash table
 
 
-*** Additional Exercises:
+*** Exercises:
 
 Resize the hash table:
 - if the count becomes greater than 75% of the table size, double the table size and redistribute the key/value pairs
@@ -83,11 +83,51 @@ HashTable.prototype.find = function(key) {
   };
 };
 
+
+// O(n)
+HashTable.prototype.resize = function(newSize) {
+  var oldStorage = this._storage;
+  this._size = newSize;
+  this._count = 0;
+  this._storage = [];
+  var that = this;
+  oldStorage.forEach(function(bucket) {
+    bucket.forEach(function(item) {
+      var key = Object.keys(item)[0];
+      that.set(key, item[key]);
+    });
+  });
+};
+
+// O(1)
 HashTable.prototype.set = function(key, value) {
-  // implement me...
+
+  var match = this.find(key).match;
+  var bucket = this.find(key).bucket;
+  // if match exists, update value
+  if (match) {
+    match[key] = value;
+  }
+  // if not, add new object with key/value pair
+  else {
+    var newItem = {};
+    newItem[key] = value;
+    this._count++;
+    bucket.push(newItem);
+    if (this._count > 0.75*this._size) {
+      this.resize(2*this._size);
+    }
+  }
+  return this;
 };
 // Time complexity:
 
+
+var myMap = new HashTable(10);
+console.log(myMap.set('key', 'value'), 'should be HT object');
+
+
+// O(1)
 HashTable.prototype.get = function(key) {
   // implement me...
 };
@@ -99,7 +139,18 @@ HashTable.prototype.has = function(key) {
 // Time complexity:
 
 HashTable.prototype.delete = function(key) {
-  // implement me...
+
+  var match = this.find(key).match;
+  if (match) {
+    var bucket = this.find(key).bucket;
+    var matchIndex = this.find(key).matchIndex;
+    bucket.splice(matchIndex, 1);
+    this._count--;
+    if (this._count < 0.25*this._size) {
+      this.resize(0.5*this._size);
+    }
+  }
+  return !!match;
 };
 // Time complexity:
 
@@ -109,19 +160,27 @@ HashTable.prototype.count = function() {
 // Time complexity:
 
 HashTable.prototype.forEach = function(callback) {
-  // implement me...
+
+  this._storage.forEach(function(bucket) {
+    bucket = bucket || [];
+    bucket.forEach(function(item) {
+      callback(item);
+    });
+  });
 };
-// Time complexity:
 
-
-
-/*
-*** Exercises:
-
-1. Implement a hash table with a binary search tree.
-
-2. Given two arrays with values, return the values that are present in both. Do this in linear time.
-
-3. Implement a hash table using linked lists for collision-handling. Why might this be preferable to using arrays.
-
-*/
+console.log('count', myMap._count, 'should be 0');
+console.log('size', myMap._size, 'should be 5');
+myMap.set('foo', 'bar');
+myMap.set('fooAgain', 'barAgain');
+myMap.set('a', 1);
+myMap.set('b', 2);
+myMap.forEach(console.log);
+console.log('count', myMap._count, 'should be 4');
+console.log('size', myMap._size, 'should be 10 (doubled)');
+myMap.delete('a');
+console.log('count', myMap._count);
+console.log('size', myMap._size);
+myMap.delete('b');
+console.log('count', myMap._count);
+console.log('size', myMap._size, 'should be 5 (halved)');
