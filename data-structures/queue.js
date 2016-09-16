@@ -45,31 +45,44 @@ myQueue.until(7)
 => 3
 What's the time complexity?
 
-
-
-
  */
-
+// TRY ADDING A HEAD AND A TAIL!! :)
 function Queue(capacity) {
   // implement me...
+  this._capacity = capacity || Infinity;
+  this._storage = {};
+  this._count = 0;
 }
 
 Queue.prototype.enqueue = function(value) {
-  // implement me...
+    //conditional that if it reaches to a certain capacity
+    if (this._capacity > this._count) {
+      this._count++;
+      this._storage[this._count] = value;
+    } else {
+      console.log("MAXIMUM CAP REACHED");
+    }
+    // adding something to storage
+    //add it's count
 };
 // Time complexity:
 
 Queue.prototype.dequeue = function() {
+  var first = Object.keys(this._storage)[0];
+  delete this._storage[first];
+  this._count--;
   // implement me...
 };
 // Time complexity:
 
 Queue.prototype.peek = function() {
   // implement me...
+  var first = Object.keys(this._storage)[0];
+  return  this._storage[first];
 };
 
 Queue.prototype.count = function() {
-  // implement me...
+  return this._count;
 };
 // Time complexity:
 
@@ -84,5 +97,43 @@ Queue.prototype.count = function() {
 
 3. Given a tree, print out the value of each node in breadth-first order using a queue data structure.
 
-
  */
+
+ var menu = new Queue();
+
+ menu.enqueue("RedBeans");
+ menu.enqueue("GreenBeans");
+ menu.enqueue("Salad");
+ menu.enqueue("Salsa");
+ console.log("Storage", menu._storage);
+ console.log("Count: ", menu.count());
+ console.log("PEEK", menu.peek());
+
+ menu.dequeue();
+ console.log("Storage", menu._storage);
+ console.log("Count: ", menu.count());
+ console.log("PEEK", menu.peek());
+
+ menu.dequeue();
+ console.log("Storage", menu._storage);
+ console.log("Count: ", menu.count());
+ console.log("PEEK", menu.peek());
+
+ //// STACK HAS BEEN REACHED //////
+ console.log("//////////////////// NEW MENU ////////////////////////");
+ var menu2 = new Queue(3);
+
+ menu2.enqueue("RedBeans");
+ console.log("Storage", menu2._storage);
+
+ menu2.enqueue("GreenBeans");
+ console.log("Storage", menu2._storage);
+
+ menu2.enqueue("Salad");
+ console.log("Storage", menu2._storage);
+
+ menu2.enqueue("Salsa");
+ console.log("Storage", menu2._storage);
+
+
+ console.log("//////////////////// TWO STACKS  ////////////////////////");

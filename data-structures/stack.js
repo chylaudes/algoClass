@@ -51,29 +51,83 @@ What's the time complexity?
  */
 
 function Stack(capacity) {
+  this._capacity = capacity || Infinity;
+  this._storage = {};
+  this._count = 0;
   // implement me...
 }
 
 Stack.prototype.push = function(value) {
-  // implement me...
+  //if the capacity is still bigger than count
+  if (this._capacity > this._count) {
+    this._count++;
+    this._storage[this._count] = value;
+  } else {
+    console.log("Capacity has been reached");
+    //the capacity has reached its limit
+  }
 };
 // Time complexity:
 
 Stack.prototype.pop = function() {
-  // implement me...
+  //remove the last item of this._storage
+  var last = this._storage[this._count];
+  delete this._storage[this._count];
+  this._count--;
+  return last;
+  //return the last item of this._storage
 };
 // Time complexity:
 
 Stack.prototype.peek = function() {
   // implement me...
+  var last = this._storage[this._count];
+  return last;
 };
 // Time complexity:
 
 Stack.prototype.count = function() {
-  // implement me...
+  return this._count;
 };
 // Time complexity:
 
+
+
+var menu = new Stack();
+
+menu.push("RedBeans");
+menu.push("GreenBeans");
+menu.push("Salad");
+menu.push("Salsa");
+console.log("Storage", menu._storage);
+console.log("Count: ", menu.count());
+console.log("PEEK", menu.peek());
+
+menu.pop();
+console.log("Storage", menu._storage);
+console.log("Count: ", menu.count());
+console.log("PEEK", menu.peek());
+
+menu.pop();
+console.log("Storage", menu._storage);
+console.log("Count: ", menu.count());
+console.log("PEEK", menu.peek());
+
+//// STACK HAS BEEN REACHED //////
+console.log("//////////////////// NEW MENU ////////////////////////");
+var menu2 = new Stack(3);
+
+menu2.push("RedBeans");
+console.log("Storage", menu2._storage);
+
+menu2.push("GreenBeans");
+console.log("Storage", menu2._storage);
+
+menu2.push("Salad");
+console.log("Storage", menu2._storage);
+
+menu2.push("Salsa");
+console.log("Storage", menu2._storage);
 
 /*
 *** Exercises:
@@ -93,3 +147,120 @@ You are given three towers (stacks) and N disks, each of different size. You can
    3. no disk can be placed on top of a disk that is smaller than it
 The disks begin on tower#1. Write a function that will move the disks from tower#1 to tower#3 in such a way that none of the constraints are violated.
  */
+
+///// MIN STACK ///////
+
+function MinStack (capacity) {
+  this._capacity = capacity || Infinity;
+  this._storage = {};
+  this._count = 0;
+  this._min = new Stack();
+}
+
+//{what: MinStack, cap: Infinity, storage:{}, count: 0, min: { what: Stack, capacity: Infinity, storage: {}, count: 0 } }
+
+MinStack.prototype.push = function(value) {
+ if (this._count < this._capacity) {
+   if (this._min.peek() < value ) {
+     this._min.push(this._min.peek());
+    } else {
+      this._min.push(value);
+     }
+     this._storage[++this._count] = value;
+ } else {
+   console.log("MAXED REACHED");
+ }
+ return this._storage[this._count];
+}; //end of push
+
+
+MinStack.prototype.pop = function(){
+  //delete last item in storage
+  var last_store = this._storage[this._count];
+  delete this._storage[this._count];
+  this._count--;
+  this._min.pop();
+  return last_store;
+
+  //delete last item in _min
+};
+
+MinStack.prototype.peek = function(){
+  var last = this._storage[this._count];
+  return last;
+};
+
+MinStack.prototype.count = function(){
+  return this._count;
+};
+
+MinStack.prototype.min = function(){
+  return this._min.peek();
+};
+console.log("//////////////////// MIN STACK ////////////////////////");
+
+var ms = new MinStack();
+
+ms.push(7);
+ms.push(20);
+ms.push(14);
+ms.push(3);
+ms.push(6);
+ms.push(10);
+ms.push(4);
+ms.push(1);
+ms.push(1);
+ms.push(1);
+
+console.log("Min Stack", JSON.stringify(ms._storage, null, 2));
+console.log("Min Stack minimummmmm", JSON.stringify(ms._min, null, 2));
+ms.pop();
+
+console.log("Min Stack", JSON.stringify(ms._storage, null, 2));
+console.log("Min Stack minimummmmm", JSON.stringify(ms._min, null, 2));
+
+console.log("count should be 9", ms.count());
+console.log("MINIMUMM should be 1", ms.min());
+
+
+ms.pop();
+ms.pop();
+
+console.log("Min Stack", JSON.stringify(ms._storage, null, 2));
+console.log("Min Stack minimummmmm", JSON.stringify(ms._min, null, 2));
+
+console.log("count should be 7", ms.count());
+console.log("MINIMUMM should be 3", ms.min());
+
+//Minimum stack keeps track of the state of the minimum stack of every push
+
+
+function Queue_TwoStacks() {
+  this._stackIn = new Stack();
+  this._stackOut = new Stack();
+}
+
+Queue_TwoStacks.prototype.enqueue = function(val) {
+  this._stackIn.push(val);
+};
+
+Queue_TwoStacks.prototype._transferStacks = function() {
+  while (this._stackIn.count() > 0) {
+    this._stackOut.push(this._stackIn.pop());
+  }
+};
+
+Queue_TwoStacks.prototype.dequeue = function() {
+  if (this._stackOut.count() === 0) this._transferStacks();// this checks if there's nothing in stackOut if there is
+  //nothing then transfer the stacks
+  return this._stackOut.pop();
+};
+
+Queue_TwoStacks.prototype.count = function() {
+  return this._stackIn.count() + this._stackOut.count();
+};
+
+Queue_TwoStacks.prototype.peek = function() {
+  if (this._stackOut.count() === 0) this._transferStacks();
+  return this._stackOut.peek();
+};
