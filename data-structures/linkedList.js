@@ -91,17 +91,67 @@ function LinkedList(headValue) {
 }
 
 LinkedList.prototype.forEach = function(callback) {
-  // implement me...
+  var node = this.head;
+  while (node) {
+    callback(node.value);
+    node = node.next;
+  }
 };
 // Time complexity:
 
 LinkedList.prototype.print = function() {
+  var str = "";
+  var currentNode = this.head
+  if (this.head.value === null) {
+   return "There's nothing in the head"
+  }
+  while (currentNode) {
+    if (currentNode.next !== null) {
+      str = str.concat(currentNode.value.toString()+", ");
+      currentNode = currentNode.next;
+    } else {
+      str = str.concat(currentNode.value.toString());
+      break;
+    }
+  }
+  return str
   // implement me...
 };
 // Time complexity:
-
+/* SHORT HANDED FOR EACH
+LinkedList.prototype.print = function() {
+  var result = [];
+  this.forEach(function(value) {
+    result.push(value);
+  });
+  return result.join(', ');
+};
+*/
 LinkedList.prototype.insertAfter = function(node, value) {
   // implement me...
+
+  var currentNode = this.head//one have a starting point which is head
+  while(currentNode.value){
+    if (currentNode.value !== node) {
+      currentNode = currentNode.next
+    } else {
+      var temp = currentNode.next;
+      currentNode.next = new Node(value);
+      currentNode.next.next = temp;
+      break;
+    }
+  }//check to see if the head is the nodevalue if not continue on
+  //starting with head we check the next node to see if it has the nodevalue
+    //if the currentNode.next !== node
+    //then currentnode is currentNode.next
+    //and keep checking for that nodevalue
+  //else the currentNode.next is the value
+    //currentNode = currendNode.next
+    //var temp = currentNode.next
+    //currentNode.next = New Node(value)
+    //currentNode.next.next = temp
+    //break
+
 };
 // Time complexity:
 
@@ -143,6 +193,68 @@ LinkedList.prototype.removeBefore = function(node) {
 // Time complexity:
 
 
+LinkedList.prototype.addToTail = function(value){
+  // start at the head and check if the this.next === to null
+  var currentNode;
+  if (this.head.next !== null) {
+    currentNode = this.head.next;
+    while ( currentNode ) {
+      if (currentNode.next === null) {
+        currentNode.next = new Node(value);
+        break;
+      } else {
+        currentNode = currentNode.next
+      }
+    }
+
+  }
+  else {
+      this.head.next = new Node(value)
+
+  }
+  //if this.next === to null set its next to a new Node with the value
+}
+
+LinkedList.prototype.removeNode = function (value) {
+  if (this.head.value === value) {
+    delete this.head
+  } else {
+    var currentNode = this.head
+    while (currentNode.next) {
+      if (currentNode.next.value !== value) {
+        if (currentNode.next.next !== null) {
+          currentNode = currentNode.next
+        } else {
+          return "Node does not exist pick another one!!";
+        }
+      }
+      else {
+        currentNode.next = currentNode.next.next
+        break;
+      }
+    }
+
+  }
+
+  //we must traverse down the list and find the value
+  //when we find the value we must point it to the next next
+}
+
+
+var list = new LinkedList(1)
+console.log("List: ", list);
+var adding = list.addToTail(2);
+var hello = list.addToTail(3);
+var hello = list.addToTail(4);
+var hello = list.addToTail(5);
+var hello = list.addToTail(6);
+// console.log("List: ", JSON.stringify(list, null, 2));
+list.removeNode(5);
+console.log("List: ", JSON.stringify(list, null, 2));
+console.log(list.print());
+list.insertAfter(2, 10);
+console.log("List: ", JSON.stringify(list, null, 2));
+console.log(list.print());
 
 /*
 *** Exercises:

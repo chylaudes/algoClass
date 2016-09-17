@@ -264,3 +264,5 @@ Queue_TwoStacks.prototype.peek = function() {
   if (this._stackOut.count() === 0) this._transferStacks();
   return this._stackOut.peek();
 };
+
+///Definitely try it out yourself
