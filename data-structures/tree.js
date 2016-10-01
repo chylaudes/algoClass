@@ -21,7 +21,7 @@ add child to tree/subtree and return child node (which should be a tree instance
 
 tree.contains(value)
 => true/false
-Return true if value is in tree, false if not
+Return true if value is in tree and its children, false if not
 
 tree.traverseDepthFirst(callback)
 => undefined
@@ -40,18 +40,27 @@ https://en.wikipedia.org/wiki/Trie
 */
 
 function Tree (value) {
-  // implement me...
+  this.value = value
+  this.children =[]// holds multiple trees with their own children
 }
 
 Tree.prototype.addChild = function(value) {
-  // implement me...
+  var child = new Tree(value);
+  this.children.push(child);
+  return child
 };
 // Time complexity:
 
 
 Tree.prototype.contains = function(value) {
-  // implement me...
-};
+  if (this.value === value) return true
+  for (var i = 0; i < this.children.length; i++) {
+    if (this.children[i].value === value) {
+      return true
+    }
+  }
+  return false;
+}
 // Time complexity:
 
 

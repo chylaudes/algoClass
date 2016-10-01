@@ -8,3 +8,19 @@ output   0 1 1 2 3 5 8 13 21 34 ...
 
 What is the time complexity? Can you think of optimizing your solution? (Hint: look up dynamic programming)
 */
+//
+
+function fib(n){
+  if (n === 0) {
+    return 0
+  }
+  if (n === 1) {
+    return 1
+  }
+  else {
+    return fib(n-1) + fib(n-2)
+    // return previous value1 + prev value 2 of n
+    //n = 9
+    // prev value 1 = 13 , value 2 = 21
+  }
+}
